@@ -1,7 +1,7 @@
 [project]
-name = "python-uv-devcontainer"
+name = "aoc-2015"
 version = "0.1.0"
-description = "Add your description here"
+description = "Base for advent of code 2015 solutions"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = []
