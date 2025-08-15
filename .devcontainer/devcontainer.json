@@ -1,11 +1,9 @@
 {
     "image": "mcr.microsoft.com/devcontainers/python:3.13",
-
     "features": {
         "ghcr.io/jsburckhardt/devcontainer-features/uv:1": {},
         "ghcr.io/jsburckhardt/devcontainer-features/ruff:1": {}
     },
-
     "customizations": {
         "vscode": {
             "extensions": [
@@ -14,6 +12,10 @@
             ]
         }
     },
-
+    // https://github.com/microsoft/vscode-dev-containers/issues/307#issuecomment-1121510682
+	"containerEnv": { "TZ": "Europe/Amsterdam" },		
+	// https://github.com/microsoft/vscode-remote-release/issues/2485#issuecomment-1722584736
+	"runArgs": ["--name", "aoc-2015"],
     "postCreateCommand": "uv sync --group dev"
+
 }
