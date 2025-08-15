@@ -23,7 +23,34 @@ def part1(data):
 
 
 def part2(data):
-    pass
+    santapos: tuple[int, int] = (0, 0)
+    robopos: tuple[int, int] = (0, 0)
+    visited: set[tuple[int, int]] = {santapos}
+
+    for i, move in enumerate(data):
+        # Alternate between Santa (even indices) and Robo (odd indices)
+        if i % 2 == 0:  # Santa's turn
+            if move == "^":
+                santapos = (santapos[0], santapos[1] + 1)
+            elif move == "v":
+                santapos = (santapos[0], santapos[1] - 1)
+            elif move == ">":
+                santapos = (santapos[0] + 1, santapos[1])
+            elif move == "<":
+                santapos = (santapos[0] - 1, santapos[1])
+            visited.add(santapos)
+        else:  # Robo's turn
+            if move == "^":
+                robopos = (robopos[0], robopos[1] + 1)
+            elif move == "v":
+                robopos = (robopos[0], robopos[1] - 1)
+            elif move == ">":
+                robopos = (robopos[0] + 1, robopos[1])
+            elif move == "<":
+                robopos = (robopos[0] - 1, robopos[1])
+            visited.add(robopos)
+
+    return len(visited)
 
 
 if __name__ == "__main__":
