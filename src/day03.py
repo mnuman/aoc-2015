@@ -1,4 +1,3 @@
-from calendar import c
 from utils.file_utils import read_raw_file
 
 
