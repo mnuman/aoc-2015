@@ -1,11 +1,11 @@
 from hashlib import md5
+
 PREFIX = "iwrupvqb"
 
 
 def part1():
     suffix = 0
     while True:
-
         key = f"{PREFIX}{suffix}".encode()
         hash = md5(key).hexdigest()
         if hash.startswith("00000"):
@@ -19,7 +19,6 @@ def part1():
 def part2():
     suffix = 346386
     while True:
-
         key = f"{PREFIX}{suffix}".encode()
         hash = md5(key).hexdigest()
         if hash.startswith("000000"):

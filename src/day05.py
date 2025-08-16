@@ -33,13 +33,17 @@ def has_forbidden_substring(s: str) -> bool:
 
 
 def is_nice_string(s: str) -> bool:
-    return (min_three_vowels(s) and has_repeated_letter(s) and not has_forbidden_substring(s))
+    return (
+        min_three_vowels(s)
+        and has_repeated_letter(s)
+        and not has_forbidden_substring(s)
+    )
 
 
 def has_repeated_pair(s: str) -> bool:
     pairs = {}
     for i in range(len(s) - 1):
-        pair = s[i:i + 2]
+        pair = s[i : i + 2]
         if pair in pairs:
             return True
         pairs[pair] = i
@@ -48,8 +52,8 @@ def has_repeated_pair(s: str) -> bool:
 
 def has_non_overlapping_pairs(s: str) -> bool:
     for i in range(len(s) - 3):
-        pair = s[i:i + 2]
-        if pair in s[i + 2:]:
+        pair = s[i : i + 2]
+        if pair in s[i + 2 :]:
             return True
     return False
 
@@ -62,7 +66,11 @@ def has_repeated_letter_with_single_character_in_between(s: str) -> bool:
 
 
 def is_nice_string_part2(s: str) -> bool:
-    return (has_repeated_pair(s) and has_non_overlapping_pairs(s) and has_repeated_letter_with_single_character_in_between(s))
+    return (
+        has_repeated_pair(s)
+        and has_non_overlapping_pairs(s)
+        and has_repeated_letter_with_single_character_in_between(s)
+    )
 
 
 def part1():

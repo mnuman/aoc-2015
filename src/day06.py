@@ -1,5 +1,4 @@
 import re
-import math
 from utils.file_utils import read_file
 
 PATTERN = re.compile(r"^(\w+ *\w*) (\d+,\d+) through (\d+,\d+)$")
@@ -11,8 +10,13 @@ def process_data():
     for line in data:
         match = PATTERN.findall(line)[0]
         if match:
-            instructions.append((match[0], tuple(
-                map(int, match[1].split(","))), tuple(map(int, match[2].split(",")))))
+            instructions.append(
+                (
+                    match[0],
+                    tuple(map(int, match[1].split(","))),
+                    tuple(map(int, match[2].split(","))),
+                )
+            )
         else:
             print(f"No match found for {line.strip()}")
     return instructions
