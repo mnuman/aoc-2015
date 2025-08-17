@@ -12,8 +12,7 @@ def part1(fname):
         # print(
         #     f"Processing line: {line}, length: {len(line) - 2}, evaluated length: {len(eval(line))}, running raw: {raw}, in-memory: {in_memory}"
         # )
-    print(
-        f"Raw length: {raw}, in-memory length: {in_memory} --> {raw - in_memory}")
+    print(f"Raw length: {raw}, in-memory length: {in_memory} --> {raw - in_memory}")
 
 
 def part2(fname):
