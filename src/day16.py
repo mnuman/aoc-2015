@@ -1,5 +1,6 @@
 from utils.file_utils import read_file
 import re
+
 aunt_sue_data = {
     "children": 3,
     "cats": 7,
@@ -10,7 +11,7 @@ aunt_sue_data = {
     "goldfish": 5,
     "trees": 3,
     "cars": 2,
-    "perfumes": 1
+    "perfumes": 1,
 }
 PATTERN = re.compile(r"(\w*): (\d+)")
 
@@ -24,9 +25,9 @@ def parse_sues(fname):
 
 
 def compare(prop, reading, sue_value):
-    if prop in ['cats', 'trees']:
+    if prop in ["cats", "trees"]:
         return reading < sue_value
-    if prop in ['pomeranians', 'goldfish']:
+    if prop in ["pomeranians", "goldfish"]:
         return reading > sue_value
     return reading == sue_value
 
