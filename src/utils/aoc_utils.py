@@ -2,6 +2,9 @@
 
 from heapq import heapify, heappush, heappop
 
+DIRECTIONS = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+ALL_DIRECTIONS = [(-1, 0), (1, 0), (0, -1), (0, 1), (-1, -1), (-1, 1), (1, -1), (1, 1)]
+
 
 def manhattan_distance(x: tuple[int, int], y: tuple[int, int]) -> int:
     return abs(x[0] - y[0]) + abs(x[1] - y[1])
@@ -90,3 +93,34 @@ class PriorityDict(dict):
 
     def empty(self):
         return len(self.keys()) == 0
+
+
+def neighbours(row, col, max_row, max_col, include_diagonals=False):
+    return [
+        (row + dr, col + dc)
+        for dr, dc in (ALL_DIRECTIONS if include_diagonals else DIRECTIONS)
+        if 0 <= row + dr < max_row and 0 <= col + dc < max_col
+    ]
+
+
+def lists_equal_any_order(list1, list2):
+    """Compare two lists for equality regardless of order.
+
+    Args:
+        list1: First list to compare
+        list2: Second list to compare
+
+    Returns:
+        bool: True if lists contain the same elements in any order, False otherwise
+
+    Examples:
+        >>> lists_equal_any_order([1, 2, 3], [3, 1, 2])
+        True
+        >>> lists_equal_any_order([1, 2, 2], [2, 1, 2])
+        True
+        >>> lists_equal_any_order([1, 2], [1, 2, 3])
+        False
+    """
+    from collections import Counter
+
+    return Counter(list1) == Counter(list2)
