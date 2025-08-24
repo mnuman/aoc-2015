@@ -1,19 +1,21 @@
 from utils.file_utils import read_file
-from typing import Dict, Union
+from typing import Dict
 
 
 def parse(fname: str) -> Dict[str, str]:
     """Parse instructions into a dictionary mapping wire -> instruction"""
     instructions = {}
     for line in read_file(fname):
-        parts = line.split(' -> ')
+        parts = line.split(" -> ")
         source = parts[0]
         target = parts[1]
         instructions[target] = source
     return instructions
 
 
-def evaluate_wire(wire: str, instructions: Dict[str, str], cache: Dict[str, int]) -> int:
+def evaluate_wire(
+    wire: str, instructions: Dict[str, str], cache: Dict[str, int]
+) -> int:
     """Recursively evaluate a wire's signal value with memoization"""
 
     # If already computed, return cached value
@@ -71,7 +73,7 @@ def solve_part1(fname: str) -> int:
     """Solve part 1: find signal on wire 'a'"""
     instructions = parse(fname)
     cache = {}
-    return evaluate_wire('a', instructions, cache)
+    return evaluate_wire("a", instructions, cache)
 
 
 def solve_part2(fname: str) -> int:
@@ -80,14 +82,14 @@ def solve_part2(fname: str) -> int:
 
     # First, get the original value of wire 'a'
     cache = {}
-    original_a = evaluate_wire('a', instructions, cache)
+    original_a = evaluate_wire("a", instructions, cache)
 
     # Override wire 'b' with the original 'a' value
-    instructions['b'] = str(original_a)
+    instructions["b"] = str(original_a)
 
     # Clear cache and compute new 'a'
     cache = {}
-    return evaluate_wire('a', instructions, cache)
+    return evaluate_wire("a", instructions, cache)
 
 
 if __name__ == "__main__":
@@ -97,21 +99,22 @@ if __name__ == "__main__":
     test_cache = {}
 
     expected = {
-        'd': 72,
-        'e': 507,
-        'f': 492,
-        'g': 114,
-        'h': 65412,
-        'i': 65079,
-        'x': 123,
-        'y': 456
+        "d": 72,
+        "e": 507,
+        "f": 492,
+        "g": 114,
+        "h": 65412,
+        "i": 65079,
+        "x": 123,
+        "y": 456,
     }
 
     print("Expected vs Actual:")
     for wire, expected_value in expected.items():
         actual = evaluate_wire(wire, test_instructions, test_cache)
         print(
-            f"{wire}: {expected_value} vs {actual} {'✓' if expected_value == actual else '✗'}")
+            f"{wire}: {expected_value} vs {actual} {'✓' if expected_value == actual else '✗'}"
+        )
 
     print("\nSolving actual puzzle:")
     part1_result = solve_part1("day07.txt")
