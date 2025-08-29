@@ -1,7 +1,7 @@
 import pytest
 from src.day22 import (
-    GameState, Spell, SPELLS, apply_effects, can_cast_spell, cast_spell,
-    is_game_over, solve_combat, parse_boss_stats, part1, part2
+    GameState, SPELLS, apply_effects, can_cast_spell, cast_spell,
+    is_game_over, solve_combat, part1, part2
 )
 
 

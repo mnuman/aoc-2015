@@ -19,7 +19,7 @@ try:
 
     result1 = solve_combat(10, 250, 13, 8, hard_mode=False)
     print(f"Result: {result1}")
-    print(f"Expected: 226 (Poison 173 + Magic Missile 53)")
+    print("Expected: 226 (Poison 173 + Magic Missile 53)")
 
     if result1 == 226:
         print("✓ Example 1 PASSED")

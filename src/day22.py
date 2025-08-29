@@ -1,13 +1,15 @@
 try:
-    from utils.file_utils import read_file  # when running as script with src on PYTHONPATH
+    # when running as script with src on PYTHONPATH
+    from utils.file_utils import read_file
 except ModuleNotFoundError:  # pragma: no cover
     # Fallback when tests import via 'from src.day22 import ...'
     from src.utils.file_utils import read_file
-from typing import NamedTuple, Dict, List, Optional, Tuple, Iterable
+from typing import Dict, List, Optional, Tuple
 from dataclasses import dataclass
 from heapq import heappush, heappop
 import os
 import sys
+
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
@@ -42,27 +44,29 @@ class GameState:
             self.boss_damage,
             self.effects.copy(),
             self.mana_spent,
-            self.is_player_turn
+            self.is_player_turn,
         )
 
     def __hash__(self):
-        return hash((
-            self.player_hp,
-            self.player_mana,
-            self.player_armor,
-            self.boss_hp,
-            tuple(sorted(self.effects.items())),
-            self.is_player_turn
-        ))
+        return hash(
+            (
+                self.player_hp,
+                self.player_mana,
+                self.player_armor,
+                self.boss_hp,
+                tuple(sorted(self.effects.items())),
+                self.is_player_turn,
+            )
+        )
 
     def __eq__(self, other):
         return (
-            self.player_hp == other.player_hp and
-            self.player_mana == other.player_mana and
-            self.player_armor == other.player_armor and
-            self.boss_hp == other.boss_hp and
-            self.effects == other.effects and
-            self.is_player_turn == other.is_player_turn
+            self.player_hp == other.player_hp
+            and self.player_mana == other.player_mana
+            and self.player_armor == other.player_armor
+            and self.boss_hp == other.boss_hp
+            and self.effects == other.effects
+            and self.is_player_turn == other.is_player_turn
         )
 
     def __lt__(self, other):
@@ -83,11 +87,14 @@ class GameState:
 # the start of each turn while active (which includes the very next boss turn
 # right after being cast).
 SPELLS = [
-    Spell("Magic Missile", 53, damage=4),          # Instant 4 damage
-    Spell("Drain", 73, damage=2, heal=2),          # Instant 2 damage + 2 heal
-    Spell("Shield", 113, duration=6),              # Effect: +7 armor during apply_effects
-    Spell("Poison", 173, duration=6),              # Effect: deal 3 damage each apply_effects
-    Spell("Recharge", 229, duration=5),            # Effect: +101 mana each apply_effects
+    Spell("Magic Missile", 53, damage=4),  # Instant 4 damage
+    Spell("Drain", 73, damage=2, heal=2),  # Instant 2 damage + 2 heal
+    # Effect: +7 armor during apply_effects
+    Spell("Shield", 113, duration=6),
+    # Effect: deal 3 damage each apply_effects
+    Spell("Poison", 173, duration=6),
+    # Effect: +101 mana each apply_effects
+    Spell("Recharge", 229, duration=5),
 ]
 
 
@@ -100,8 +107,6 @@ def apply_effects(state: GameState) -> GameState:
 
     # Apply effects
     for effect_name in list(state.effects.keys()):
-        turns_remaining = state.effects[effect_name]
-
         if effect_name == "Shield":
             state.player_armor = 7
         elif effect_name == "Poison":
@@ -166,7 +171,13 @@ def get_possible_spells(state: GameState) -> List[Spell]:
     return [spell for spell in SPELLS if can_cast_spell(state, spell)]
 
 
-def solve_combat(initial_hp: int, initial_mana: int, boss_hp: int, boss_damage: int, hard_mode: bool = False) -> Optional[int]:
+def solve_combat(
+    initial_hp: int,
+    initial_mana: int,
+    boss_hp: int,
+    boss_damage: int,
+    hard_mode: bool = False,
+) -> Optional[int]:
     """
     Solve the wizard combat using Dijkstra's algorithm.
     Returns the minimum mana cost to win, or None if impossible.
@@ -179,7 +190,7 @@ def solve_combat(initial_hp: int, initial_mana: int, boss_hp: int, boss_damage: 
         boss_damage=boss_damage,
         effects={},
         mana_spent=0,
-        is_player_turn=True
+        is_player_turn=True,
     )
 
     # Priority queue: (mana_spent, state)
@@ -256,7 +267,10 @@ def solve_combat(initial_hp: int, initial_mana: int, boss_hp: int, boss_damage: 
 
 # ---- Recursive DFS solver (authoritative minimal search) ---- #
 
-def _apply_effects_for_dfs(player_hp: int, player_mana: int, boss_hp: int, effects: Dict[str, int]) -> tuple[int, int, int, Dict[str, int], int]:
+
+def _apply_effects_for_dfs(
+    player_hp: int, player_mana: int, boss_hp: int, effects: Dict[str, int]
+) -> tuple[int, int, int, Dict[str, int], int]:
     """Apply effects (for DFS path). Returns updated (player_hp, player_mana, boss_hp, new_effects, armor)."""
     armor = 0
     new_effects: Dict[str, int] = {}
@@ -272,13 +286,26 @@ def _apply_effects_for_dfs(player_hp: int, player_mana: int, boss_hp: int, effec
     return player_hp, player_mana, boss_hp, new_effects, armor
 
 
-def solve_combat_dfs(initial_hp: int, initial_mana: int, boss_hp: int, boss_damage: int, hard_mode: bool = False) -> Optional[int]:
+def solve_combat_dfs(
+    initial_hp: int,
+    initial_mana: int,
+    boss_hp: int,
+    boss_damage: int,
+    hard_mode: bool = False,
+) -> Optional[int]:
     """Depth-first exhaustive search with pruning to guarantee minimal mana."""
     best: Optional[int] = None
     from functools import lru_cache
 
     @lru_cache(maxsize=None)
-    def dfs(player_hp: int, player_mana: int, boss_hp: int, effects_key: Tuple[Tuple[str, int], ...], player_turn: bool, mana_spent: int) -> Optional[int]:
+    def dfs(
+        player_hp: int,
+        player_mana: int,
+        boss_hp: int,
+        effects_key: Tuple[Tuple[str, int], ...],
+        player_turn: bool,
+        mana_spent: int,
+    ) -> Optional[int]:
         nonlocal best
         # Prune if already worse than known best
         if best is not None and mana_spent >= best:
@@ -295,7 +322,9 @@ def solve_combat_dfs(initial_hp: int, initial_mana: int, boss_hp: int, boss_dama
                     return None
 
         # Apply effects
-        player_hp, player_mana, boss_hp, effects, armor = _apply_effects_for_dfs(player_hp, player_mana, boss_hp, effects)
+        player_hp, player_mana, boss_hp, effects, armor = _apply_effects_for_dfs(
+            player_hp, player_mana, boss_hp, effects
+        )
 
         # Boss dead after effects?
         if boss_hp <= 0:
@@ -332,10 +361,21 @@ def solve_combat_dfs(initial_hp: int, initial_mana: int, boss_hp: int, boss_dama
                 if new_boss_hp <= 0:
                     if best is None or new_mana_spent < best:
                         best = new_mana_spent
-                    result_any = new_mana_spent if (result_any is None or new_mana_spent < result_any) else result_any
+                    result_any = (
+                        new_mana_spent
+                        if (result_any is None or new_mana_spent < result_any)
+                        else result_any
+                    )
                     continue
 
-                dfs(new_player_hp, new_player_mana, new_boss_hp, tuple(sorted(new_effects.items())), False, new_mana_spent)
+                dfs(
+                    new_player_hp,
+                    new_player_mana,
+                    new_boss_hp,
+                    tuple(sorted(new_effects.items())),
+                    False,
+                    new_mana_spent,
+                )
             return result_any
         else:
             # Boss turn: boss attacks (after effects already applied above).
@@ -343,7 +383,14 @@ def solve_combat_dfs(initial_hp: int, initial_mana: int, boss_hp: int, boss_dama
             player_hp -= damage
             if player_hp <= 0:
                 return None
-            return dfs(player_hp, player_mana, boss_hp, tuple(sorted(effects.items())), True, mana_spent)
+            return dfs(
+                player_hp,
+                player_mana,
+                boss_hp,
+                tuple(sorted(effects.items())),
+                True,
+                mana_spent,
+            )
 
     dfs(initial_hp, initial_mana, boss_hp, tuple(), True, 0)
     return best

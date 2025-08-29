@@ -4,10 +4,10 @@
 Debug version of Day 22 to trace the winning sequence
 """
 
-from day22 import GameState, Spell, SPELLS, apply_effects, cast_spell, is_game_over, get_possible_spells
+from day22 import GameState, apply_effects, cast_spell, is_game_over, get_possible_spells
 import sys
 import os
-from typing import Optional, List, Tuple, Dict
+from typing import Optional, List, Tuple
 from dataclasses import dataclass
 from heapq import heappush, heappop
 
